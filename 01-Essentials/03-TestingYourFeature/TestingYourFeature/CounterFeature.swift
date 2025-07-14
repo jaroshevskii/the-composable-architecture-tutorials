@@ -1,6 +1,6 @@
 //
 //  CounterFeature.swift
-//  AddingSideEffectsApp
+//  TestingYourFeature
 //
 //  Created by Sasha Jaroshevskii on 06.07.2025.
 //
@@ -11,7 +11,7 @@ import SwiftUI
 @Reducer
 struct CounterFeature {
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var count = 0
         var fact: String?
         var isLoading = false
