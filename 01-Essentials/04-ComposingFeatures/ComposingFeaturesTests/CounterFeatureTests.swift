@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import Testing
 
-@testable import TestingYourFeature
+@testable import ComposingFeatures
 
 @MainActor
 struct CounterFeatureTests {
