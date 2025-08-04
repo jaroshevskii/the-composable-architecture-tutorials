@@ -17,7 +17,7 @@ struct CounterFeatureTests {
         let store = TestStore(initialState: CounterFeature.State()) {
             CounterFeature()
         }
-
+        
         await store.send(.incrementButtonTapped) {
             $0.count = 1
         }
@@ -39,9 +39,9 @@ struct CounterFeatureTests {
         await store.send(.toggleTimerButtonTapped) {
             $0.isTimerRunning = true
         }
-        await clock.advance(by: .seconds(2))
+        await clock.advance(by: .seconds(1))
         await store.receive(\.timerTick) {
-            $0.count = 2
+            $0.count = 1
         }
         await store.send(.toggleTimerButtonTapped) {
             $0.isTimerRunning = false
@@ -55,13 +55,15 @@ struct CounterFeatureTests {
         } withDependencies: {
             $0.numberFact.fetch = { "\($0) is a good number." }
         }
-
+        
         await store.send(.factButtonTapped) {
             $0.isLoading = true
+            $0.fact = nil
         }
+        
         await store.receive(\.factResponse, timeout: .seconds(1)) {
             $0.isLoading = false
-            $0.fact = "\($0) is a good number."
+            $0.fact = "0 is a good number."
         }
     }
 }
