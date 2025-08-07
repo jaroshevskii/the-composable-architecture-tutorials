@@ -60,7 +60,7 @@ struct ContactsFeature {
 }
 
 struct ContactsView: View {
-    let store: StoreOf<ContactsFeature>
+    @Bindable var store: StoreOf<ContactsFeature>
     
     var body: some View {
         NavigationStack {
@@ -79,6 +79,11 @@ struct ContactsView: View {
                     }
                 }
             }
+        }
+        .sheet(
+            item: $store.scope(state: \.addContact, action: \.addContact)
+        ) { addContactStore in
+            AddContactView(store: addContactStore)
         }
     }
 }
