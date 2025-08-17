@@ -13,20 +13,17 @@ struct Contact: Equatable, Identifiable {
     let id: UUID
     var name: String
 }
+
 @Reducer
 struct ContactsFeature {
     @ObservableState
     struct State: Equatable {
-//        @Presents var addContact: AddContactFeature.State?
-//        @Presents var alert: AlertState<Action.Alert>?
         @Presents var destination: Destination.State?
         var contacts: IdentifiedArrayOf<Contact> = []
     }
     
     enum Action {
         case addButtonTapped
-//        case addContact(PresentationAction<AddContactFeature.Action>)
-//        case alert(PresentationAction<Alert>)
         case destination(PresentationAction<Destination.Action>)
         case deleteButtonTapped(id: Contact.ID)
         
@@ -35,13 +32,15 @@ struct ContactsFeature {
         }
     }
     
+    @Dependency(\.uuid) var uuid
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .addButtonTapped:
                 state.destination = .addContact(
                     AddContactFeature.State(
-                        contact: Contact(id: UUID(), name: "")
+                        contact: Contact(id: self.uuid(), name: "")
                     )
                 )
                 return .none
