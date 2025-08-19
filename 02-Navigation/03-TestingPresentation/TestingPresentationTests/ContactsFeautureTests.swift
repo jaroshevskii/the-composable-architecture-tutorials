@@ -57,10 +57,34 @@ struct ContactsFeautureTests {
         await store.send(.addButtonTapped)
         await store.send(\.destination.addContact.setName, "Blob Jr.")
         await store.send(\.destination.addContact.saveButtonTapped)
-        await stroe.skipReceivedActions()
-        await store.assert {
+        await store.skipReceivedActions()
+        store.assert {
             $0.contacts = [
                 Contact(id: UUID(0), name: "Blob Jr.")
+            ]
+            $0.destination = nil
+        }
+    }
+    
+    @Test
+    func deleteContact() async {
+        let store = TestStore(
+            initialState: ContactsFeature.State(
+                contacts: [
+                    Contact(id: UUID(0), name: "Blob"),
+                    Contact(id: UUID(1), name: "Blob Jr."),
+                ]
+            )
+        ) {
+            ContactsFeature()
+        }
+        
+        await store.send(.deleteButtonTapped(id: UUID(1))) {
+            $0.destination = .alert(.deleteConfirmation(id: UUID(1)))
+        }
+        await store.send(\.destination.alert.confirmDeletion, UUID(1)) {
+            $0.contacts = [
+                Contact(id: UUID(0), name: "Blob"),
             ]
             $0.destination = nil
         }
