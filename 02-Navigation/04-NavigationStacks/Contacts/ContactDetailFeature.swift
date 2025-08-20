@@ -28,7 +28,7 @@ struct ContactDetailFeature {
     }
 }
 
-struct ContactDetailView {
+struct ContactDetailView: View {
     let store: StoreOf<ContactDetailFeature>
     
     var body: some View {
@@ -45,10 +45,10 @@ struct ContactDetailView {
             store: Store(
                 initialState: ContactDetailFeature.State(
                     contact: Contact(id: UUID(), name: "Blob")
-                ),
+                )
             ) {
-               ContactDetailFeature()
-            )
+                ContactDetailFeature()
+            }
         )
     }
 }
